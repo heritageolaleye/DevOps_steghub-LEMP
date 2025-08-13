@@ -7,7 +7,7 @@ The **LEMP stack** is a popular web development platform made up of four compone
 
 ## Step 0: Prerequisites
 
-1. Launch an EC2 Instance: Start by launching a t2.micro EC2 instance (or any compute engine) running Ubuntu 24.04 LTS or later. Choose a region close to your target audience. (This guide assumes you’re using AWS, but you can adapt these steps for other cloud providers.)
+1. Launch an EC2 Instance: Start by launching a t3.micro EC2 instance (or any compute engine) running Ubuntu 24.04 LTS or later. Choose a region close to your target audience. (This guide assumes you’re using AWS, but you can adapt these steps for other cloud providers.)
 
 2. Create an SSH Key Pair: Name it my-ec2-key (or any name you prefer) to access your instance via SSH on port 22.
 
@@ -158,6 +158,128 @@ server {
  ```bash
  sudo nginx -t
  ```
+
+ 5. Disable Default Config:
+ 
+ ```bash
+ sudo unlink /etc/nginx/sites-enabled/default
+ ```
+ ![lemp18!](/images/lemp18.jpg)
+
+ 6. Create an Index Page:
+
+ ```bash
+ sudo echo 'Hello LEMP from hostname:' $(curl -s http://169.254.169.254/latest/meta-data/public-hostname) ' with public IP ' $(curl -s http://169.254.169.254/latest/meta-data/public-ipv4) > /var/www/projectLEMP/index.html
+ ```
+ ![lemp19!](/images/lemp19.jpg)
+
+
+ Now access the site via public IP in a browser.
+
+ ![lemp20!](/images/lemp20.jpg)
+
+ ## Step 5: Test PHP Requests
+ 
+ 1. Create a sample PHP File:
+
+ ```bash
+ sudo vi /var/www/projectLEMP/info.php
+ ```
+
+ Add the following code:
+
+ ```bash
+ <?php 
+ phpinfo(); 
+ ```
+
+ 2. Access via Browser:
+
+ http://13.61.12.80/index.php
+
+ ![lemp21!](/images/lemp21.jpg)
+
+ ## Step 6: Create and Retrieve Data from MySQL
+
+ 1. Log into MySQL:
+
+ ```bash
+ sudo mysql -p
+ ```
+
+ 2. Create a Database:
+
+ ```bash
+ CREATE DATABASE example_database;
+ ```
+
+ 3. Create a User and Grant Privileges:
+
+ ```bash
+ CREATE USER 'example_user'@'%' IDENTIFIED WITH mysql_native_password BY 'PassWord.1';
+ GRANT ALL ON example_database.* TO 'example_user'@'%';
+ ```
+
+ ![lemp22!](/images/lemp22.jpg)
+
+ 4. Login as New User:
+
+ ```bash
+ mysql -u example_user -p
+ ```
+
+ 5. Create a Table:
+
+ ```bash
+ USE example_database;
+CREATE example_database.todo_list (
+    item_id INT AUTO_INCREMENT,
+    content VARCHAR(255),
+    PRIMARY KEY (item_id)
+);
+```
+
+5. Insert Records:
+
+![lemp23](/images/lemp23.jpg)
+
+6. Verify Data:
+
+![lemp24](/images/lemp24.jpg)
+
+7.Create a PHP Script to Retrieve Data:
+
+```bash
+sudo vi /var/www/projectLEMP/todo_list.php
+```
+Add this code:
+
+```bash
+<?php
+$user = "user1";
+$password = "RootPass.3";
+$database = "todo_database";
+$table= "todo_list";
+
+try {
+    $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
+    echo "<h2>TODO List</h2><ol>";
+    foreach ($db->query("SELECT content FROM $table") as $row) {
+        echo "<li>" . $row['content'] . "</li>";
+    }
+    echo "</ol>";
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?>
+```
+8. Access Your To-Do List:
+
+http://13.61.12.80/todolist.php
+
+![lemp25](/images/lemp25.jpg)
+
+
 
 
 
