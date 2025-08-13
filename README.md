@@ -84,14 +84,14 @@ sudo mysql
 ```
 ![lemp11!](/images/lemp11.jpg)
 
-#3. S=Secure MySQL:
+3. Secure MySQL:
 
 ```bash
 sudo mysql_secure_installation
 ```
 ![lemp12!](/images/lemp12.jpg)
 
-#4. Test MySQL Login:
+4. Test MySQL Login:
 
 ```bash
 sudo mysql -p
@@ -279,6 +279,8 @@ http://13.61.12.80/todolist.php
 
 ![lemp25](/images/lemp25.jpg)
 
+## Conclusion
+Congratulations! You've successfully set up a LEMP stack on AWS. This LEMP stack (just like the LAMP stack) provides a solid platform for hosting and serving web apps. If you as a developer want to deploy scalable solutions that can be relied upon, then you would need to seriously consider one of these stacks as they have been tested, tried and proven to meet expectations.
 
 
 
